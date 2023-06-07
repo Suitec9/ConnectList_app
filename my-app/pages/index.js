@@ -37,9 +37,9 @@ export default function Home() {
 
     // If user is not connected to the Goerli network, let them know and throw an error
     const { chainId } = await web3Provider.getNetwork();
-    if (chainId !== 5) {
-      window.alert("Change the network to Goerli");
-      throw new Error("Change network to Goerli");
+    if (chainId !== 11155111) {
+      window.alert("Change the network to  Sepolia");
+      throw new Error("Change network to  Sepolia");
     }
 
     if (needSigner) {
@@ -58,13 +58,13 @@ export default function Home() {
       const signer = await getProviderOrSigner(true);
       // Create a new instance of the Contract with a Signer, which allows
       // update methods
-      const whitelistContract = new Contract(
+      const connectlistContract = new Contract(
        CONNECTLIST_CONTRACT_ADDRESS,
         abi,
         signer
       );
       // call the addAddressToWhitelist from the contract
-      const tx = await whitelistContract.addAddressToWhitelist();
+      const tx = await connectlistContract.addAddressToWhitelist();
       setLoading(true);
       // wait for the transaction to get mined
       await tx.wait();
@@ -87,14 +87,14 @@ export default function Home() {
       const provider = await getProviderOrSigner();
       // We connect to the Contract using a Provider, so we will only
       // have read-only access to the Contract
-      const whitelistContract = new Contract(
+      const connectlistContract = new Contract(
        CONNECTLIST_CONTRACT_ADDRESS,
         abi,
         provider
       );
       // call the numAddressesWhitelisted from the contract
       const _numberOfWhitelisted =
-        await whitelistContract.numAddressesWhitelisted();
+        await connectlistContract.numAddressesWhitelisted();
       setNumberOfWhitelisted(_numberOfWhitelisted);
     } catch (err) {
       console.error(err);
@@ -110,7 +110,7 @@ export default function Home() {
       // Even though it is a read transaction, since Signers are just special kinds of Providers,
       // We can use it in it's place
       const signer = await getProviderOrSigner(true);
-      const whitelistContract = new Contract(
+      const connectlistContract = new Contract(
        CONNECTLIST_CONTRACT_ADDRESS,
         abi,
         signer
@@ -118,7 +118,7 @@ export default function Home() {
       // Get the address associated to the signer which is connected to  MetaMask
       const address = await signer.getAddress();
       // call the whitelistedAddresses from the contract
-      const _joinedWhitelist = await whitelistContract.whitelistedAddresses(
+      const _joinedWhitelist = await connectlistContract.whitelistedAddresses(
         address
       );
       setJoinedWhitelist(_joinedWhitelist);
@@ -182,7 +182,7 @@ export default function Home() {
       // Assign the Web3Modal class to the reference object by setting it's `current` value
       // The `current` value is persisted throughout as long as this page is open
       web3ModalRef.current = new Web3Modal({
-        network: "goerli",
+        network: "sepolia",
         providerOptions: {},
         disableInjectedProvider: false,
       });
